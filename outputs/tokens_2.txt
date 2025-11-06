@@ -1,0 +1,30 @@
+Scanner
+
+TOKEN(ID, "x")
+TOKEN(ASSIGN, "=")
+TOKEN(NUM, "10")
+TOKEN(SEMICOL, ";")
+TOKEN(ID, "i")
+TOKEN(ASSIGN, "=")
+TOKEN(NUM, "0")
+TOKEN(SEMICOL, ";")
+TOKEN(WHILE, "while")
+TOKEN(ID, "i")
+TOKEN(LE, "<")
+TOKEN(ID, "x")
+TOKEN(DO, "do")
+TOKEN(PRINT, "print")
+TOKEN(LPAREN, "(")
+TOKEN(ID, "i")
+TOKEN(RPAREN, ")")
+TOKEN(SEMICOL, ";")
+TOKEN(ID, "i")
+TOKEN(ASSIGN, "=")
+TOKEN(ID, "i")
+TOKEN(PLUS, "+")
+TOKEN(NUM, "1")
+TOKEN(ENDWHILE, "endwhile")
+TOKEN(END)
+
+Scanner exitoso
+

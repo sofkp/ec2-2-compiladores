@@ -1,0 +1,10 @@
+x = 10;
+y = 5;
+while y<x do
+    i = 0;
+    while i < y do 
+        if i<5 then print(10)  else  print(20) endif;
+        i = i + 1 
+    endwhile;
+    y = y + 1 
+endwhile

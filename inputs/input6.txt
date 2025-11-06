@@ -1,0 +1,7 @@
+x = 4;
+y = 10;
+if 5>x then 
+    if y==10 then print(10)  else  print(20) endif
+else
+    print(30)
+endif
