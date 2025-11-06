@@ -96,6 +96,9 @@ int EVALVisitor::visit(BinaryExp* exp) {
                 result = 0;
             }
             break;
+        case LE_OP: result = v1 <= v2; break;
+        case LT_OP: result = v1 < v2; break;
+        case ET_OP: result = v1 == v2; break;
         default:
             cout << "Operador desconocido" << endl;
             result = 0;
@@ -143,16 +146,41 @@ int GencodeVisitor::visit(BinaryExp* exp) {
             cout << "addq %rcx, %rax" << endl;
             break;
         }
+        case LT_OP: {
+            exp->left->accept(this);
+            cout << "pushq %rax" << endl;
+            exp->right->accept(this);
+            cout << "movq %rax, %rcx" << endl;
+            cout << "popq %rax" << endl;
+            cout << "cmpq %rcx, %rax" << endl;
+            cout << "movl $0, %eax" << endl;
+            cout << "setl %al" << endl;
+            cout << "movzbq %al, %rax" << endl;
+            break;
+        }
         case LE_OP: {
             exp->left->accept(this);
             cout << "pushq %rax" << endl;
             exp->right->accept(this);
             cout << "movq %rax, %rcx" << endl;
             cout << "popq %rax" << endl;
-            cout << "cmpq %rcx, %rax"<< endl;
-            cout << "movl $0, %eax"<< endl;
-            cout << "setl %al"<< endl;
-            cout << "movzbq %al, %rax"<< endl;
+            cout << "cmpq %rcx, %rax" << endl;
+            cout << "movl $0, %eax" << endl;
+            cout << "setle %al" << endl;
+            cout << "movzbq %al, %rax" << endl;
+            break;
+        }
+        case ET_OP: {
+            exp->left->accept(this);
+            cout << "pushq %rax" << endl;
+            exp->right->accept(this);
+            cout << "movq %rax, %rcx" << endl;
+            cout << "popq %rax" << endl;
+            cout << "cmpq %rcx, %rax" << endl;
+            cout << "movl $0, %eax" << endl;
+            cout << "sete %al" << endl;
+            cout << "movzbq %al, %rax" << endl;
+            break;
         }
     }
     return 0;
