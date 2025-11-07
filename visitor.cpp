@@ -182,6 +182,18 @@ int GencodeVisitor::visit(BinaryExp* exp) {
             cout << "movzbq %al, %rax" << endl;
             break;
         }
+        case GT_OP: {
+            exp->left->accept(this);
+            cout << "pushq %rax" << endl;
+            exp->right->accept(this);
+            cout << "movq %rax, %rcx" << endl;
+            cout << "popq %rax" << endl;
+            cout << "cmpq %rcx, %rax" << endl;
+            cout << "movl $0, %eax" << endl;
+            cout << "setg %al" << endl;
+            cout << "movzbq %al, %rax" << endl;
+            break;
+        }
     }
     return 0;
 }
@@ -194,7 +206,7 @@ int GencodeVisitor::visit(NumberExp* exp) {
 void GencodeVisitor::visit(PrintStm* stm) {
     stm->e->accept(this);
     cout << "movq %rax, %rsi" << endl;
-    cout << " leaq print_fmt(%rip), %rdi" << endl;
+    cout << "leaq print_fmt(%rip), %rdi" << endl;
     cout << "movl $0, %eax" << endl;
     cout << "call printf@PLT" << endl;
 }
@@ -218,42 +230,48 @@ void GencodeVisitor::visit(AssignStm* stm) {
 }
 
 void GencodeVisitor::visit(IfStm* stm) {
+    int num = contador2++;
+    string elsetag = "else_" + to_string(num); //para que cada else del if tenga un nombre diferente
+    string endiftag = "endif_" + to_string(num);
     stm->condicion->accept(this);
     cout << "cmpq $0 ,%rax"  << endl;;
-    cout << "je else"   << endl;
+    cout << "je " << elsetag   << endl;
     for(auto i:stm->stlist1) {
         i->accept(this);
     }
-    cout << "jmp endif"   << endl;
-    cout << "else:"   << endl;
+    cout << "jmp " << endiftag  << endl;
+    cout << elsetag << ":"   << endl;
     for(auto i:stm->stlist2) {
         i->accept(this);
     }
-    cout << "endif:"   << endl;
+    cout << endiftag << ":"   << endl;
 }
 
 
 void GencodeVisitor::visit(WhileStm* stm) {
-    cout << "while:"   << endl;
+    int num = contador2++;
+    string whiletag = "while_" + to_string(num);
+    string endwhiletag = "endwhile_" + to_string(num);
+    cout << whiletag << ":"   << endl;
     stm->condicion->accept(this);
     cout << "cmpq $0 ,%rax"  << endl;;
-    cout << "je endwhile"   << endl;
+    cout << "je " << endwhiletag   << endl;
     for(auto i:stm->stlist) {
         i->accept(this);
     }
-    cout << "jmp while"   << endl;
-    cout << "endwhile:"   << endl;
+    cout << "jmp " << whiletag   << endl;
+    cout << endwhiletag << ":"   << endl;
 }
 
 void GencodeVisitor::code(Program* program){
-    cout << ".data" << endl;
+    cout << ".section .rodata" << endl; //esta parte lo cambie xq no me corria en mi ubuntu :,( pero se supone que es lo mismo
     cout << "print_fmt: .string \"%ld\\n\" " << endl;
     cout << ".text" << endl;
     cout << ".globl main" << endl;
     cout << "main:" << endl;
     cout << "pushq %rbp" << endl;
     cout << "movq %rsp, %rbp" << endl;
-    cout << "sub $24, %rsp" << endl; 
+    cout << "sub $32, %rsp" << endl; 
     for (auto i:program->slist){
         i->accept(this);
     }

@@ -19,7 +19,8 @@ enum BinaryOp {
     POW_OP,
     LE_OP,
     LT_OP,
-    ET_OP
+    ET_OP,
+    GT_OP
 };
 
 // Clase abstracta Exp

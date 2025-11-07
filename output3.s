@@ -1,5 +1,3 @@
-=== STDOUT ===
-Parseo exitoso
 .section .rodata
 print_fmt: .string "%ld\n" 
 .text
@@ -10,6 +8,8 @@ movq %rsp, %rbp
 sub $32, %rsp
 movq $4, %rax
 movq %rax,-8(%rbp)
+movq $10, %rax
+movq %rax,-16(%rbp)
 movq -8(%rbp), %rax
 pushq %rax
 movq $5, %rax
@@ -21,14 +21,33 @@ setl %al
 movzbq %al, %rax
 cmpq $0 ,%rax
 je else_0
+movq -16(%rbp), %rax
+pushq %rax
+movq $10, %rax
+movq %rax, %rcx
+popq %rax
+cmpq %rcx, %rax
+movl $0, %eax
+setl %al
+movzbq %al, %rax
+cmpq $0 ,%rax
+je else_1
 movq $10, %rax
 movq %rax, %rsi
 leaq print_fmt(%rip), %rdi
 movl $0, %eax
 call printf@PLT
+jmp endif_1
+else_1:
+movq $20, %rax
+movq %rax, %rsi
+leaq print_fmt(%rip), %rdi
+movl $0, %eax
+call printf@PLT
+endif_1:
 jmp endif_0
 else_0:
-movq $20, %rax
+movq $30, %rax
 movq %rax, %rsi
 leaq print_fmt(%rip), %rdi
 movl $0, %eax
@@ -38,5 +57,3 @@ movl $0, %eax
 leave
 ret
 .section .note.GNU-stack,"",@progbits
-
-=== STDERR ===

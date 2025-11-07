@@ -23,6 +23,7 @@ public:
         ID,      // ID
         LE, // less equal
         LT, // less than
+        GT, // greater than
         SEMICOL,    
         ASSIGN,
         PRINT,

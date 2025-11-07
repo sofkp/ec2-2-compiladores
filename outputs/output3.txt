@@ -1,13 +1,13 @@
 === STDOUT ===
 Parseo exitoso
-.data
+.section .rodata
 print_fmt: .string "%ld\n" 
 .text
 .globl main
 main:
 pushq %rbp
 movq %rsp, %rbp
-sub $24, %rsp
+sub $32, %rsp
 movq $4, %rax
 movq %rax,-8(%rbp)
 movq $10, %rax
@@ -22,7 +22,7 @@ movl $0, %eax
 setl %al
 movzbq %al, %rax
 cmpq $0 ,%rax
-je else
+je else_0
 movq -16(%rbp), %rax
 pushq %rax
 movq $10, %rax
@@ -33,28 +33,28 @@ movl $0, %eax
 setl %al
 movzbq %al, %rax
 cmpq $0 ,%rax
-je else
+je else_1
 movq $10, %rax
 movq %rax, %rsi
- leaq print_fmt(%rip), %rdi
+leaq print_fmt(%rip), %rdi
 movl $0, %eax
 call printf@PLT
-jmp endif
-else:
+jmp endif_1
+else_1:
 movq $20, %rax
 movq %rax, %rsi
- leaq print_fmt(%rip), %rdi
+leaq print_fmt(%rip), %rdi
 movl $0, %eax
 call printf@PLT
-endif:
-jmp endif
-else:
+endif_1:
+jmp endif_0
+else_0:
 movq $30, %rax
 movq %rax, %rsi
- leaq print_fmt(%rip), %rdi
+leaq print_fmt(%rip), %rdi
 movl $0, %eax
 call printf@PLT
-endif:
+endif_0:
 movl $0, %eax
 leave
 ret

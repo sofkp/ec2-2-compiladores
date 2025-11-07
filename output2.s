@@ -1,5 +1,3 @@
-=== STDOUT ===
-Parseo exitoso
 .section .rodata
 print_fmt: .string "%ld\n" 
 .text
@@ -42,5 +40,3 @@ movl $0, %eax
 leave
 ret
 .section .note.GNU-stack,"",@progbits
-
-=== STDERR ===

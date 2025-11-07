@@ -93,8 +93,8 @@ Stm* Parser::parseStm() {
         {
             b->stlist2.push_back(parseStm());
             while(match(Token::SEMICOL)){
-            b->stlist1.push_back(parseStm());
-        }
+                b->stlist2.push_back(parseStm());
+            }
         }
         match(Token::ENDIF);
         return b;
@@ -136,8 +136,13 @@ Exp* Parser::parseCE() {
         Exp* r = parseBE();
         l = new BinaryExp(l, r, op);
     }
-     if (match(Token::ET)) {
+    if (match(Token::ET)) {
         BinaryOp op = ET_OP;
+        Exp* r = parseBE();
+        l = new BinaryExp(l, r, op);
+    }
+    if (match(Token::GT)) {
+        BinaryOp op = GT_OP;
         Exp* r = parseBE();
         l = new BinaryExp(l, r, op);
     }
